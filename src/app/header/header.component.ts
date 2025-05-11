@@ -7,17 +7,20 @@ import { CartService } from '../services/cart.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-    count:any = 0;
-   isOpen:boolean =false;
-   previewFlag:boolean = false;
-   inVoiceNo :any;
-   cartItems:any;
-  constructor(private cartService:CartService) { 
+  count: any = 0;
+  isOpen: boolean = false;
+  previewFlag: boolean = false;
+  inVoiceNo: any;
+  cartItems: any;
+  finalPrice: any;
+  isFinalPrice: boolean = false;
+  constructor(private cartService: CartService) {
 
   }
-  ngOnInit(){
-    this.cartService.cartUpdates$.subscribe(()=>{
-      this.count= this.cartService.count;
+  
+  ngOnInit() {
+    this.cartService.cartUpdates$.subscribe(() => {
+      this.count = this.cartService.count;
     });
     this.cartService.cartUpdates$.subscribe((data) => {
       console.log(data);
@@ -25,21 +28,21 @@ export class HeaderComponent {
     })
   }
 
-  openCart():void{
-        this.isOpen = true;
 
+  closeCart(): void {
+    this.isFinalPrice = false;
   }
-  closeCart():void{
-    this.isOpen = false;
-    this.previewFlag = false;
-  }
-  preview():void{
 
+  checkout() {
+    this.finalPrice = this.cartItems.reduce((sum: any, item: { price: any; }) => sum + item.price, 0);
+    this.isFinalPrice = true;
+    console.log("finalPrice", this.finalPrice);
   }
-  removeProduct(item:any):void{
-     this.cartService.cartItmes.splice(this.cartService.cartItmes.findIndex(element=>item.id === element.id),1);
-    this.count= this.cartService.count;
+
+  removeProduct(item: any): void {
+    this.cartService.cartItmes.splice(this.cartService.cartItmes.findIndex(element => item.id === element.id), 1);
+    this.count = this.cartService.count;
   }
-  
-  
+
+
 }

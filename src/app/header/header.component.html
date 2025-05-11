@@ -19,7 +19,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <ng-container>
+        <ng-container *ngIf="!isFinalPrice">
           <div class="col-md-4">
             <h5 class="modal-title"> Items in Cart</h5>
           </div>
@@ -27,12 +27,21 @@
             <h5 class="modal-title">Quantity</h5>
           </div>
         </ng-container>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <ng-container *ngIf="isFinalPrice">
+          <div class="col-md-4">
+            <h5 class="modal-title"> Final Price</h5>
+          </div>
+        </ng-container>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeCart()"></button>
       </div>
       <div class="modal-body">
-        <div *ngIf="count">
+        <div *ngIf="count && !isFinalPrice">
           <div class="row mb-3" *ngFor="let item of cartItems">
-            <div class="col-md-4"> {{item.productname}} {{item.price | currency: 'INR': true}}</div>
+            <div class="col-md-4">
+              {{item.productname}} {{item.price | currency: 'INR': true}}
+              <br><sub class="text-warning"><i>{{item.offerText}}</i></sub>
+            </div>
             <div class="col-md-2 offset-md-2">
               {{item.qty}}
             </div>
@@ -42,13 +51,16 @@
             </div>
           </div>
         </div>
+        <div *ngIf="isFinalPrice">
+          <h4>{{finalPrice | currency: 'INR': true}}</h4>
+        </div>
         <div *ngIf="!count" class="row">
           <div class="col"> No items in the cart</div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeCart()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="preview()">CheckOut</button>
+        <button type="button" *ngIf="!isFinalPrice" class="btn btn-primary" (click)="checkout()">CheckOut</button>
       </div>
     </div>
   </div>

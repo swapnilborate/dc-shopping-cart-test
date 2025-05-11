@@ -13,7 +13,4 @@ export class ProductService {
     return products;
   }
 
-  // getCategoryItems(id:number): Product [] {
-  //   return products.filter(item => item.categoryId == id );
-  // }
 }
